@@ -7,7 +7,6 @@ import {
   Layers,
   Menu,
   NotebookPen,
-  Search,
   Settings,
   TrendingUp,
   Users,
@@ -15,7 +14,8 @@ import {
 import { useState } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
+import { GlobalSearch } from "@/components/global-search";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
