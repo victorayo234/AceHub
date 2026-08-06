@@ -10,33 +10,156 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppFlashcardsRouteImport } from './routes/app.flashcards'
+import { Route as AppGroupsRouteImport } from './routes/app.groups'
+import { Route as AppNotesRouteImport } from './routes/app.notes'
+import { Route as AppProgressRouteImport } from './routes/app.progress'
+import { Route as AppQuizzesRouteImport } from './routes/app.quizzes'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppCoursesIndexRouteImport } from './routes/app.courses.index'
+import { Route as AppCoursesCourseIdRouteImport } from './routes/app.courses.$courseId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFlashcardsRoute = AppFlashcardsRouteImport.update({
+  id: '/flashcards',
+  path: '/flashcards',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGroupsRoute = AppGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotesRoute = AppNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProgressRoute = AppProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuizzesRoute = AppQuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCoursesIndexRoute = AppCoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCoursesCourseIdRoute = AppCoursesCourseIdRouteImport.update({
+  id: '/courses/$courseId',
+  path: '/courses/$courseId',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/groups': typeof AppGroupsRoute
+  '/app/notes': typeof AppNotesRoute
+  '/app/progress': typeof AppProgressRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/': typeof AppIndexRoute
+  '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
+  '/app/courses/': typeof AppCoursesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/groups': typeof AppGroupsRoute
+  '/app/notes': typeof AppNotesRoute
+  '/app/progress': typeof AppProgressRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app': typeof AppIndexRoute
+  '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
+  '/app/courses': typeof AppCoursesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/groups': typeof AppGroupsRoute
+  '/app/notes': typeof AppNotesRoute
+  '/app/progress': typeof AppProgressRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/': typeof AppIndexRoute
+  '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
+  '/app/courses/': typeof AppCoursesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/flashcards'
+    | '/app/groups'
+    | '/app/notes'
+    | '/app/progress'
+    | '/app/quizzes'
+    | '/app/settings'
+    | '/app/'
+    | '/app/courses/$courseId'
+    | '/app/courses/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/app/flashcards'
+    | '/app/groups'
+    | '/app/notes'
+    | '/app/progress'
+    | '/app/quizzes'
+    | '/app/settings'
+    | '/app'
+    | '/app/courses/$courseId'
+    | '/app/courses'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/flashcards'
+    | '/app/groups'
+    | '/app/notes'
+    | '/app/progress'
+    | '/app/quizzes'
+    | '/app/settings'
+    | '/app/'
+    | '/app/courses/$courseId'
+    | '/app/courses/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +171,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/flashcards': {
+      id: '/app/flashcards'
+      path: '/flashcards'
+      fullPath: '/app/flashcards'
+      preLoaderRoute: typeof AppFlashcardsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/groups': {
+      id: '/app/groups'
+      path: '/groups'
+      fullPath: '/app/groups'
+      preLoaderRoute: typeof AppGroupsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notes': {
+      id: '/app/notes'
+      path: '/notes'
+      fullPath: '/app/notes'
+      preLoaderRoute: typeof AppNotesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/progress': {
+      id: '/app/progress'
+      path: '/progress'
+      fullPath: '/app/progress'
+      preLoaderRoute: typeof AppProgressRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/quizzes': {
+      id: '/app/quizzes'
+      path: '/quizzes'
+      fullPath: '/app/quizzes'
+      preLoaderRoute: typeof AppQuizzesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/courses/': {
+      id: '/app/courses/'
+      path: '/courses'
+      fullPath: '/app/courses/'
+      preLoaderRoute: typeof AppCoursesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/courses/$courseId': {
+      id: '/app/courses/$courseId'
+      path: '/courses/$courseId'
+      fullPath: '/app/courses/$courseId'
+      preLoaderRoute: typeof AppCoursesCourseIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppFlashcardsRoute: typeof AppFlashcardsRoute
+  AppGroupsRoute: typeof AppGroupsRoute
+  AppNotesRoute: typeof AppNotesRoute
+  AppProgressRoute: typeof AppProgressRoute
+  AppQuizzesRoute: typeof AppQuizzesRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppCoursesCourseIdRoute: typeof AppCoursesCourseIdRoute
+  AppCoursesIndexRoute: typeof AppCoursesIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppFlashcardsRoute: AppFlashcardsRoute,
+  AppGroupsRoute: AppGroupsRoute,
+  AppNotesRoute: AppNotesRoute,
+  AppProgressRoute: AppProgressRoute,
+  AppQuizzesRoute: AppQuizzesRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppCoursesCourseIdRoute: AppCoursesCourseIdRoute,
+  AppCoursesIndexRoute: AppCoursesIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
