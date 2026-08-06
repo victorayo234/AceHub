@@ -15,7 +15,9 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppFlashcardsRouteImport } from './routes/app.flashcards'
 import { Route as AppGroupsRouteImport } from './routes/app.groups'
 import { Route as AppNotesRouteImport } from './routes/app.notes'
+import { Route as AppProgressRouteImport } from './routes/app.progress'
 import { Route as AppQuizzesRouteImport } from './routes/app.quizzes'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppCoursesIndexRouteImport } from './routes/app.courses.index'
 import { Route as AppCoursesCourseIdRouteImport } from './routes/app.courses.$courseId'
 
@@ -49,9 +51,19 @@ const AppNotesRoute = AppNotesRouteImport.update({
   path: '/notes',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProgressRoute = AppProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppQuizzesRoute = AppQuizzesRouteImport.update({
   id: '/quizzes',
   path: '/quizzes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCoursesIndexRoute = AppCoursesIndexRouteImport.update({
@@ -71,7 +83,9 @@ export interface FileRoutesByFullPath {
   '/app/flashcards': typeof AppFlashcardsRoute
   '/app/groups': typeof AppGroupsRoute
   '/app/notes': typeof AppNotesRoute
+  '/app/progress': typeof AppProgressRoute
   '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/app/courses/': typeof AppCoursesIndexRoute
@@ -81,7 +95,9 @@ export interface FileRoutesByTo {
   '/app/flashcards': typeof AppFlashcardsRoute
   '/app/groups': typeof AppGroupsRoute
   '/app/notes': typeof AppNotesRoute
+  '/app/progress': typeof AppProgressRoute
   '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
   '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/app/courses': typeof AppCoursesIndexRoute
@@ -93,7 +109,9 @@ export interface FileRoutesById {
   '/app/flashcards': typeof AppFlashcardsRoute
   '/app/groups': typeof AppGroupsRoute
   '/app/notes': typeof AppNotesRoute
+  '/app/progress': typeof AppProgressRoute
   '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/app/courses/': typeof AppCoursesIndexRoute
@@ -106,7 +124,9 @@ export interface FileRouteTypes {
     | '/app/flashcards'
     | '/app/groups'
     | '/app/notes'
+    | '/app/progress'
     | '/app/quizzes'
+    | '/app/settings'
     | '/app/'
     | '/app/courses/$courseId'
     | '/app/courses/'
@@ -116,7 +136,9 @@ export interface FileRouteTypes {
     | '/app/flashcards'
     | '/app/groups'
     | '/app/notes'
+    | '/app/progress'
     | '/app/quizzes'
+    | '/app/settings'
     | '/app'
     | '/app/courses/$courseId'
     | '/app/courses'
@@ -127,7 +149,9 @@ export interface FileRouteTypes {
     | '/app/flashcards'
     | '/app/groups'
     | '/app/notes'
+    | '/app/progress'
     | '/app/quizzes'
+    | '/app/settings'
     | '/app/'
     | '/app/courses/$courseId'
     | '/app/courses/'
@@ -182,11 +206,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/progress': {
+      id: '/app/progress'
+      path: '/progress'
+      fullPath: '/app/progress'
+      preLoaderRoute: typeof AppProgressRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/quizzes': {
       id: '/app/quizzes'
       path: '/quizzes'
       fullPath: '/app/quizzes'
       preLoaderRoute: typeof AppQuizzesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/courses/': {
@@ -210,7 +248,9 @@ interface AppRouteChildren {
   AppFlashcardsRoute: typeof AppFlashcardsRoute
   AppGroupsRoute: typeof AppGroupsRoute
   AppNotesRoute: typeof AppNotesRoute
+  AppProgressRoute: typeof AppProgressRoute
   AppQuizzesRoute: typeof AppQuizzesRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCoursesCourseIdRoute: typeof AppCoursesCourseIdRoute
   AppCoursesIndexRoute: typeof AppCoursesIndexRoute
@@ -220,7 +260,9 @@ const AppRouteChildren: AppRouteChildren = {
   AppFlashcardsRoute: AppFlashcardsRoute,
   AppGroupsRoute: AppGroupsRoute,
   AppNotesRoute: AppNotesRoute,
+  AppProgressRoute: AppProgressRoute,
   AppQuizzesRoute: AppQuizzesRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
   AppCoursesCourseIdRoute: AppCoursesCourseIdRoute,
   AppCoursesIndexRoute: AppCoursesIndexRoute,
