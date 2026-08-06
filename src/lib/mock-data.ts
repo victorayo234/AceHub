@@ -118,6 +118,9 @@ export const groups = [
   { id: "g1", name: "BIO 201 Finals Crew", members: 6, notes: 14, code: "BIO-9K2X", goal: "Finish chapters 8–12 by Sunday" },
   { id: "g2", name: "Algo Practice Club", members: 11, notes: 32, code: "ALG-7T4M", goal: "Two problems a day, every day" },
   { id: "g3", name: "Late Night Chem", members: 4, notes: 5, code: "CHM-1P8B", goal: "Master reaction mechanisms" },
+  { id: "g4", name: "Stats Study Room", members: 8, notes: 19, code: "STA-5R3D", goal: "One past paper every weekend" },
+  { id: "g5", name: "Physics Problem Solvers", members: 7, notes: 12, code: "PHY-2W9L", goal: "Clear problem sets before Wednesday" },
+  { id: "g6", name: "Essay Feedback Circle", members: 5, notes: 9, code: "ENG-6Q1V", goal: "Swap drafts and review within 24h" },
 ];
 
 export const chat = [
