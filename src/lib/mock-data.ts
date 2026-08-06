@@ -15,6 +15,12 @@ export const courses: Course[] = [
   { id: "chem-101", title: "Organic Chemistry", code: "CHEM 101", tag: "rose", progress: 31, notes: 9, files: 6 },
   { id: "math-220", title: "Linear Algebra", code: "MATH 220", tag: "violet", progress: 58, notes: 14, files: 2 },
   { id: "psy-150", title: "Cognitive Psychology", code: "PSY 150", tag: "emerald", progress: 12, notes: 3, files: 1 },
+  { id: "phys-130", title: "Classical Mechanics", code: "PHYS 130", tag: "indigo", progress: 64, notes: 11, files: 7 },
+  { id: "econ-200", title: "Microeconomics", code: "ECON 200", tag: "amber", progress: 40, notes: 8, files: 4 },
+  { id: "stat-210", title: "Probability & Statistics", code: "STAT 210", tag: "teal", progress: 77, notes: 16, files: 5 },
+  { id: "cs-260", title: "Operating Systems", code: "CS 260", tag: "violet", progress: 22, notes: 6, files: 8 },
+  { id: "eng-105", title: "Academic Writing", code: "ENG 105", tag: "rose", progress: 93, notes: 10, files: 2 },
+  { id: "phil-115", title: "Logic & Reasoning", code: "PHIL 115", tag: "emerald", progress: 51, notes: 5, files: 3 },
 ];
 
 export const tagColor: Record<string, string> = {
@@ -42,6 +48,13 @@ export const notes: Note[] = [
   { id: "n3", title: "Cold War timeline", courseId: "hist-110", kind: "note", updated: "2 days ago", excerpt: "From the Truman Doctrine through the Cuban Missile Crisis and détente…" },
   { id: "n4", title: "Reaction mechanisms handout", courseId: "chem-101", kind: "pdf", updated: "3 days ago", excerpt: "SN1 vs SN2, carbocation stability and stereochemical outcomes.", pages: 12 },
   { id: "n5", title: "Eigenvalues intuition", courseId: "math-220", kind: "note", updated: "5 days ago", excerpt: "A matrix stretches space along its eigenvectors by its eigenvalues…" },
+  { id: "n6", title: "Memory & encoding models", courseId: "psy-150", kind: "note", updated: "6 days ago", excerpt: "Sensory, short-term and long-term stores; chunking and rehearsal effects." },
+  { id: "n7", title: "Problem set 4 — Newtonian dynamics", courseId: "phys-130", kind: "pdf", updated: "1 week ago", excerpt: "Free-body diagrams, friction on inclines and conservation of momentum.", pages: 8 },
+  { id: "n8", title: "Elasticity of demand", courseId: "econ-200", kind: "note", updated: "1 week ago", excerpt: "Price elasticity, revenue effects and why necessities behave differently…" },
+  { id: "n9", title: "Distributions cheat sheet", courseId: "stat-210", kind: "pdf", updated: "8 days ago", excerpt: "Binomial, Poisson, normal — means, variances and when to use each.", pages: 6 },
+  { id: "n10", title: "Deadlock & the banker's algorithm", courseId: "cs-260", kind: "note", updated: "9 days ago", excerpt: "Four Coffman conditions and how safe-state checking avoids deadlock." },
+  { id: "n11", title: "Thesis statements that work", courseId: "eng-105", kind: "note", updated: "2 weeks ago", excerpt: "Arguable, specific, and answerable within the length of the essay." },
+  { id: "n12", title: "Truth tables & validity", courseId: "phil-115", kind: "pdf", updated: "2 weeks ago", excerpt: "Constructing truth tables to test entailment and logical equivalence.", pages: 10 },
 ];
 
 export type Deck = {
@@ -58,6 +71,12 @@ export const decks: Deck[] = [
   { id: "d2", title: "Big-O complexities", courseId: "cs-140", total: 30, due: 8, mastered: 19 },
   { id: "d3", title: "Cold War dates", courseId: "hist-110", total: 26, due: 0, mastered: 26 },
   { id: "d4", title: "Functional groups", courseId: "chem-101", total: 38, due: 21, mastered: 6 },
+  { id: "d5", title: "Matrix operations", courseId: "math-220", total: 34, due: 9, mastered: 15 },
+  { id: "d6", title: "Memory models", courseId: "psy-150", total: 22, due: 14, mastered: 4 },
+  { id: "d7", title: "Kinematics formulas", courseId: "phys-130", total: 28, due: 5, mastered: 17 },
+  { id: "d8", title: "Supply & demand terms", courseId: "econ-200", total: 25, due: 11, mastered: 9 },
+  { id: "d9", title: "Probability distributions", courseId: "stat-210", total: 31, due: 3, mastered: 24 },
+  { id: "d10", title: "Scheduling algorithms", courseId: "cs-260", total: 20, due: 18, mastered: 2 },
 ];
 
 export const cards = [
@@ -99,6 +118,9 @@ export const groups = [
   { id: "g1", name: "BIO 201 Finals Crew", members: 6, notes: 14, code: "BIO-9K2X", goal: "Finish chapters 8–12 by Sunday" },
   { id: "g2", name: "Algo Practice Club", members: 11, notes: 32, code: "ALG-7T4M", goal: "Two problems a day, every day" },
   { id: "g3", name: "Late Night Chem", members: 4, notes: 5, code: "CHM-1P8B", goal: "Master reaction mechanisms" },
+  { id: "g4", name: "Stats Study Room", members: 8, notes: 19, code: "STA-5R3D", goal: "One past paper every weekend" },
+  { id: "g5", name: "Physics Problem Solvers", members: 7, notes: 12, code: "PHY-2W9L", goal: "Clear problem sets before Wednesday" },
+  { id: "g6", name: "Essay Feedback Circle", members: 5, notes: 9, code: "ENG-6Q1V", goal: "Swap drafts and review within 24h" },
 ];
 
 export const chat = [

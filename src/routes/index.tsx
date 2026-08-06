@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import heroImage from "@/assets/hero-study.jpg";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
@@ -59,6 +60,7 @@ function Landing() {
           <span className="font-display text-lg font-bold tracking-tight">AceHub</span>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button asChild variant="ghost" size="sm">
             <Link to="/app">Sign In</Link>
           </Button>

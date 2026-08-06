@@ -7,7 +7,6 @@ import {
   Layers,
   Menu,
   NotebookPen,
-  Search,
   Settings,
   TrendingUp,
   Users,
@@ -15,7 +14,8 @@ import {
 import { useState } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
+import { GlobalSearch } from "@/components/global-search";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -78,12 +78,6 @@ export function AppShell() {
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border bg-sidebar lg:flex">
         <Brand />
         <NavList />
-        <div className="mt-auto m-3 rounded-xl bg-primary-soft p-4">
-          <p className="text-sm font-semibold text-accent-foreground">Free plan</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            8 of 20 AI generations used this week.
-          </p>
-        </div>
       </aside>
 
       <div className="lg:pl-64">
@@ -102,19 +96,15 @@ export function AppShell() {
             </SheetContent>
           </Sheet>
 
-          <div className="relative max-w-md flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search notes, decks, courses…"
-              className="h-10 rounded-lg border-transparent bg-secondary pl-9 focus-visible:bg-card"
-            />
-          </div>
+          <GlobalSearch />
 
-          <div className="ml-auto flex items-center gap-3">
-            <div className="flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.04_60)] px-3 py-1.5 text-sm font-semibold text-[oklch(0.48_0.12_50)]">
+          <div className="ml-auto flex items-center gap-2 md:gap-3">
+            <div className="flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-semibold text-accent-foreground">
               <Flame className="h-4 w-4 text-flame" />
               14
             </div>
+            <ThemeToggle />
+
             <Avatar className="h-9 w-9">
               <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
                 AO
