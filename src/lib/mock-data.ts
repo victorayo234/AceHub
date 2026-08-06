@@ -15,6 +15,12 @@ export const courses: Course[] = [
   { id: "chem-101", title: "Organic Chemistry", code: "CHEM 101", tag: "rose", progress: 31, notes: 9, files: 6 },
   { id: "math-220", title: "Linear Algebra", code: "MATH 220", tag: "violet", progress: 58, notes: 14, files: 2 },
   { id: "psy-150", title: "Cognitive Psychology", code: "PSY 150", tag: "emerald", progress: 12, notes: 3, files: 1 },
+  { id: "phys-130", title: "Classical Mechanics", code: "PHYS 130", tag: "indigo", progress: 64, notes: 11, files: 7 },
+  { id: "econ-200", title: "Microeconomics", code: "ECON 200", tag: "amber", progress: 40, notes: 8, files: 4 },
+  { id: "stat-210", title: "Probability & Statistics", code: "STAT 210", tag: "teal", progress: 77, notes: 16, files: 5 },
+  { id: "cs-260", title: "Operating Systems", code: "CS 260", tag: "violet", progress: 22, notes: 6, files: 8 },
+  { id: "eng-105", title: "Academic Writing", code: "ENG 105", tag: "rose", progress: 93, notes: 10, files: 2 },
+  { id: "phil-115", title: "Logic & Reasoning", code: "PHIL 115", tag: "emerald", progress: 51, notes: 5, files: 3 },
 ];
 
 export const tagColor: Record<string, string> = {
