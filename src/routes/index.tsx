@@ -59,6 +59,7 @@ function Landing() {
           <span className="font-display text-lg font-bold tracking-tight">AceHub</span>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button asChild variant="ghost" size="sm">
             <Link to="/app">Sign In</Link>
           </Button>
