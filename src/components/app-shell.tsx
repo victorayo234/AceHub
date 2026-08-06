@@ -96,13 +96,8 @@ export function AppShell() {
             </SheetContent>
           </Sheet>
 
-          <div className="relative max-w-md flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search notes, decks, courses…"
-              className="h-10 rounded-lg border-transparent bg-secondary pl-9 focus-visible:bg-card"
-            />
-          </div>
+          <GlobalSearch />
+
 
           <div className="ml-auto flex items-center gap-3">
             <div className="flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.04_60)] px-3 py-1.5 text-sm font-semibold text-[oklch(0.48_0.12_50)]">
