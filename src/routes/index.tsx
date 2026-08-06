@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import heroImage from "@/assets/hero-study.jpg";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
