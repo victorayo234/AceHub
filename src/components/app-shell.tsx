@@ -98,12 +98,13 @@ export function AppShell() {
 
           <GlobalSearch />
 
-
-          <div className="ml-auto flex items-center gap-3">
-            <div className="flex items-center gap-1.5 rounded-full bg-[oklch(0.96_0.04_60)] px-3 py-1.5 text-sm font-semibold text-[oklch(0.48_0.12_50)]">
+          <div className="ml-auto flex items-center gap-2 md:gap-3">
+            <div className="flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-semibold text-accent-foreground">
               <Flame className="h-4 w-4 text-flame" />
               14
             </div>
+            <ThemeToggle />
+
             <Avatar className="h-9 w-9">
               <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
                 AO
