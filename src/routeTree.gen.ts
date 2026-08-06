@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppFlashcardsRouteImport } from './routes/app.flashcards'
+import { Route as AppNotesRouteImport } from './routes/app.notes'
 import { Route as AppCoursesIndexRouteImport } from './routes/app.courses.index'
 import { Route as AppCoursesCourseIdRouteImport } from './routes/app.courses.$courseId'
 
@@ -30,6 +32,16 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFlashcardsRoute = AppFlashcardsRouteImport.update({
+  id: '/flashcards',
+  path: '/flashcards',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotesRoute = AppNotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCoursesIndexRoute = AppCoursesIndexRouteImport.update({
   id: '/courses/',
   path: '/courses/',
@@ -44,12 +56,16 @@ const AppCoursesCourseIdRoute = AppCoursesCourseIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/notes': typeof AppNotesRoute
   '/app/': typeof AppIndexRoute
   '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/app/courses/': typeof AppCoursesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/notes': typeof AppNotesRoute
   '/app': typeof AppIndexRoute
   '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/app/courses': typeof AppCoursesIndexRoute
@@ -58,19 +74,36 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/notes': typeof AppNotesRoute
   '/app/': typeof AppIndexRoute
   '/app/courses/$courseId': typeof AppCoursesCourseIdRoute
   '/app/courses/': typeof AppCoursesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/app/' | '/app/courses/$courseId' | '/app/courses/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/flashcards'
+    | '/app/notes'
+    | '/app/'
+    | '/app/courses/$courseId'
+    | '/app/courses/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/app/courses/$courseId' | '/app/courses'
+  to:
+    | '/'
+    | '/app/flashcards'
+    | '/app/notes'
+    | '/app'
+    | '/app/courses/$courseId'
+    | '/app/courses'
   id:
     | '__root__'
     | '/'
     | '/app'
+    | '/app/flashcards'
+    | '/app/notes'
     | '/app/'
     | '/app/courses/$courseId'
     | '/app/courses/'
@@ -104,6 +137,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/flashcards': {
+      id: '/app/flashcards'
+      path: '/flashcards'
+      fullPath: '/app/flashcards'
+      preLoaderRoute: typeof AppFlashcardsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notes': {
+      id: '/app/notes'
+      path: '/notes'
+      fullPath: '/app/notes'
+      preLoaderRoute: typeof AppNotesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/courses/': {
       id: '/app/courses/'
       path: '/courses'
@@ -122,12 +169,16 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppFlashcardsRoute: typeof AppFlashcardsRoute
+  AppNotesRoute: typeof AppNotesRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCoursesCourseIdRoute: typeof AppCoursesCourseIdRoute
   AppCoursesIndexRoute: typeof AppCoursesIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppFlashcardsRoute: AppFlashcardsRoute,
+  AppNotesRoute: AppNotesRoute,
   AppIndexRoute: AppIndexRoute,
   AppCoursesCourseIdRoute: AppCoursesCourseIdRoute,
   AppCoursesIndexRoute: AppCoursesIndexRoute,
