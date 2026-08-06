@@ -78,12 +78,6 @@ export function AppShell() {
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border bg-sidebar lg:flex">
         <Brand />
         <NavList />
-        <div className="mt-auto m-3 rounded-xl bg-primary-soft p-4">
-          <p className="text-sm font-semibold text-accent-foreground">Free plan</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            8 of 20 AI generations used this week.
-          </p>
-        </div>
       </aside>
 
       <div className="lg:pl-64">
