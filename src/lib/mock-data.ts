@@ -71,6 +71,12 @@ export const decks: Deck[] = [
   { id: "d2", title: "Big-O complexities", courseId: "cs-140", total: 30, due: 8, mastered: 19 },
   { id: "d3", title: "Cold War dates", courseId: "hist-110", total: 26, due: 0, mastered: 26 },
   { id: "d4", title: "Functional groups", courseId: "chem-101", total: 38, due: 21, mastered: 6 },
+  { id: "d5", title: "Matrix operations", courseId: "math-220", total: 34, due: 9, mastered: 15 },
+  { id: "d6", title: "Memory models", courseId: "psy-150", total: 22, due: 14, mastered: 4 },
+  { id: "d7", title: "Kinematics formulas", courseId: "phys-130", total: 28, due: 5, mastered: 17 },
+  { id: "d8", title: "Supply & demand terms", courseId: "econ-200", total: 25, due: 11, mastered: 9 },
+  { id: "d9", title: "Probability distributions", courseId: "stat-210", total: 31, due: 3, mastered: 24 },
+  { id: "d10", title: "Scheduling algorithms", courseId: "cs-260", total: 20, due: 18, mastered: 2 },
 ];
 
 export const cards = [
