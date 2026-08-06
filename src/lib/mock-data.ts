@@ -48,6 +48,13 @@ export const notes: Note[] = [
   { id: "n3", title: "Cold War timeline", courseId: "hist-110", kind: "note", updated: "2 days ago", excerpt: "From the Truman Doctrine through the Cuban Missile Crisis and détente…" },
   { id: "n4", title: "Reaction mechanisms handout", courseId: "chem-101", kind: "pdf", updated: "3 days ago", excerpt: "SN1 vs SN2, carbocation stability and stereochemical outcomes.", pages: 12 },
   { id: "n5", title: "Eigenvalues intuition", courseId: "math-220", kind: "note", updated: "5 days ago", excerpt: "A matrix stretches space along its eigenvectors by its eigenvalues…" },
+  { id: "n6", title: "Memory & encoding models", courseId: "psy-150", kind: "note", updated: "6 days ago", excerpt: "Sensory, short-term and long-term stores; chunking and rehearsal effects." },
+  { id: "n7", title: "Problem set 4 — Newtonian dynamics", courseId: "phys-130", kind: "pdf", updated: "1 week ago", excerpt: "Free-body diagrams, friction on inclines and conservation of momentum.", pages: 8 },
+  { id: "n8", title: "Elasticity of demand", courseId: "econ-200", kind: "note", updated: "1 week ago", excerpt: "Price elasticity, revenue effects and why necessities behave differently…" },
+  { id: "n9", title: "Distributions cheat sheet", courseId: "stat-210", kind: "pdf", updated: "8 days ago", excerpt: "Binomial, Poisson, normal — means, variances and when to use each.", pages: 6 },
+  { id: "n10", title: "Deadlock & the banker's algorithm", courseId: "cs-260", kind: "note", updated: "9 days ago", excerpt: "Four Coffman conditions and how safe-state checking avoids deadlock." },
+  { id: "n11", title: "Thesis statements that work", courseId: "eng-105", kind: "note", updated: "2 weeks ago", excerpt: "Arguable, specific, and answerable within the length of the essay." },
+  { id: "n12", title: "Truth tables & validity", courseId: "phil-115", kind: "pdf", updated: "2 weeks ago", excerpt: "Constructing truth tables to test entailment and logical equivalence.", pages: 10 },
 ];
 
 export type Deck = {
