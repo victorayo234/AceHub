@@ -14,6 +14,9 @@ import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    mode: typeof search["mode"] === "string" ? (search["mode"] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Sign in or sign up — AceHub" },
