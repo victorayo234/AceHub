@@ -71,14 +71,40 @@ function Brand() {
   );
 }
 
+function SidebarUser({ onNavigate }: { onNavigate?: () => void }) {
+  const { profile, user, avatarSrc } = useAuth();
+  const name = profile?.full_name ?? user?.email ?? "Student";
+
+  return (
+    <Link
+      to="/app/settings"
+      onClick={onNavigate}
+      className="mt-auto flex items-center gap-3 border-t border-border px-4 py-4 transition-colors hover:bg-secondary"
+    >
+      <Avatar className="h-9 w-9">
+        {avatarSrc ? <AvatarImage src={avatarSrc} alt={name} /> : null}
+        <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
+          {initials(profile?.full_name, user?.email)}
+        </AvatarFallback>
+      </Avatar>
+      <div className="min-w-0">
+        <p className="truncate text-sm font-medium">{name}</p>
+        <p className="truncate text-xs text-muted-foreground">{user?.email}</p>
+      </div>
+    </Link>
+  );
+}
+
 export function AppShell() {
   const [open, setOpen] = useState(false);
+  const { profile, user, avatarSrc } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border bg-sidebar lg:flex">
         <Brand />
         <NavList />
+        <SidebarUser />
       </aside>
 
       <div className="lg:pl-64">
@@ -90,10 +116,11 @@ export function AppShell() {
                 <span className="sr-only">Open navigation</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64 bg-sidebar p-0">
+            <SheetContent side="left" className="flex w-64 flex-col bg-sidebar p-0">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
               <Brand />
               <NavList onNavigate={() => setOpen(false)} />
+              <SidebarUser onNavigate={() => setOpen(false)} />
             </SheetContent>
           </Sheet>
 
@@ -106,11 +133,14 @@ export function AppShell() {
             </div>
             <ThemeToggle />
 
-            <Avatar className="h-9 w-9">
-              <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
-                AO
-              </AvatarFallback>
-            </Avatar>
+            <Link to="/app/settings">
+              <Avatar className="h-9 w-9">
+                {avatarSrc ? <AvatarImage src={avatarSrc} alt={profile?.full_name ?? "Profile"} /> : null}
+                <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
+                  {initials(profile?.full_name, user?.email)}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
           </div>
         </header>
 
