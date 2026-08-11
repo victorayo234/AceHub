@@ -62,10 +62,10 @@ function Landing() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Button asChild variant="ghost" size="sm">
-            <Link to="/app">Sign In</Link>
+            <Link to="/auth">Sign In</Link>
           </Button>
           <Button asChild size="sm">
-            <Link to="/app">Get Started</Link>
+            <Link to="/auth" search={{ mode: "signup" }}>Get Started</Link>
           </Button>
         </div>
       </header>
@@ -86,12 +86,12 @@ function Landing() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to="/app">
+              <Link to="/auth" search={{ mode: "signup" }}>
                 Get Started <ArrowRight className="ml-1.5 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/app">Sign In</Link>
+              <Link to="/auth">Sign In</Link>
             </Button>
           </div>
         </div>
