@@ -100,7 +100,10 @@ function AuthPage() {
   });
 
   const handleForgot = wrap(async () => {
-    const { error } = await supabase.auth.signInWithOtp({ email, shouldCreateUser: false });
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: false },
+    });
     if (error) throw error;
     setMode("reset");
     toast.message("Code sent", { description: "Enter the code from your email to reset your password." });
