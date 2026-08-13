@@ -12,7 +12,11 @@ export type Profile = {
   notify_streak: boolean;
   notify_flashcards: boolean;
   notify_groups: boolean;
+  department_id: string | null;
+  level: number | null;
+  onboarding_completed: boolean;
 };
+
 
 type AuthContextValue = {
   session: Session | null;
