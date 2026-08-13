@@ -5,7 +5,8 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } f
 import { PageHeader } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { courses, notes, tagColor, upcoming, weekly } from "@/lib/mock-data";
+import { useMyCourses } from "@/hooks/use-courses";
+import { notes, tagColor, upcoming, weekly } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/app/")({
   head: () => ({
@@ -20,6 +21,8 @@ export const Route = createFileRoute("/app/")({
 });
 
 function Dashboard() {
+  const { data: myCourses } = useMyCourses();
+
   return (
     <div>
       <PageHeader
@@ -118,7 +121,7 @@ function Dashboard() {
           </Link>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
-          {courses.slice(0, 3).map((c) => (
+          {(myCourses ?? []).slice(0, 3).map((c) => (
             <Link
               key={c.id}
               to="/app/courses/$courseId"
