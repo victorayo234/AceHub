@@ -1,10 +1,11 @@
-import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import { ArrowLeft, FileText, Layers, NotebookPen, Sparkles } from "lucide-react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { ArrowLeft, FileText, Loader2, NotebookPen, Sparkles } from "lucide-react";
 
 import { EmptyState, PageHeader } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { courses, notes, tagColor } from "@/lib/mock-data";
+import { useMyCourses } from "@/hooks/use-courses";
+import { notes, tagColor } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/app/courses/$courseId")({
   head: () => ({
@@ -15,17 +16,38 @@ export const Route = createFileRoute("/app/courses/$courseId")({
       { property: "og:description", content: "All notes, PDFs and decks inside this course." },
     ],
   }),
-  loader: ({ params }) => {
-    const course = courses.find((c) => c.id === params.courseId);
-    if (!course) throw notFound();
-    return { course };
-  },
   component: CourseDetail,
 });
 
 function CourseDetail() {
-  const { course } = Route.useLoaderData();
-  const items = notes.filter((n) => n.courseId === course.id);
+  const { courseId } = Route.useParams();
+  const { data: courses, isLoading } = useMyCourses();
+  const course = courses?.find((c) => c.id === courseId);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-16">
+        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <EmptyState
+        icon={NotebookPen}
+        title="Course not found"
+        body="This course isn't part of your current selection."
+        action={
+          <Button asChild>
+            <Link to="/app/courses">Back to my courses</Link>
+          </Button>
+        }
+      />
+    );
+  }
+
+  const items = notes.slice(0, (course.notes % 4) + 1);
 
   return (
     <div>
@@ -38,7 +60,7 @@ function CourseDetail() {
 
       <PageHeader
         title={course.title}
-        subtitle={`${course.code} · ${course.notes} notes · ${course.files} files`}
+        subtitle={`${course.code} · ${course.level} Level · ${course.notes} notes · ${course.files} files`}
         action={
           <Button asChild>
             <Link to="/app/notes">
@@ -95,23 +117,6 @@ function CourseDetail() {
           ))}
         </div>
       )}
-
-      <div className="card-soft mt-6 flex flex-wrap items-center justify-between gap-4 p-6">
-        <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-soft text-accent-foreground">
-            <Layers className="h-4 w-4" />
-          </span>
-          <div>
-            <p className="text-sm font-semibold">Turn this course into a deck</p>
-            <p className="text-xs text-muted-foreground">
-              Generate flashcards from every note in {course.code}.
-            </p>
-          </div>
-        </div>
-        <Button asChild variant="outline">
-          <Link to="/app/flashcards">Generate flashcards</Link>
-        </Button>
-      </div>
     </div>
   );
 }
