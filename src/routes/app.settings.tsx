@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Loader2, LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -183,6 +183,19 @@ function Settings() {
       </section>
 
       <section className="card-soft mt-6 flex flex-wrap items-center justify-between gap-4 p-6">
+        <div>
+          <h2 className="text-base font-semibold">Department & courses</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Change your department, level or the nine courses on your dashboard.
+          </p>
+        </div>
+        <Button asChild variant="outline">
+          <Link to="/onboarding">Edit course selection</Link>
+        </Button>
+      </section>
+
+      <section className="card-soft mt-6 flex flex-wrap items-center justify-between gap-4 p-6">
+
         <div>
           <h2 className="text-base font-semibold">Account</h2>
           <p className="mt-1 text-sm text-muted-foreground">Sign out of AceHub on this device.</p>

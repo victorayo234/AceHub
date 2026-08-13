@@ -11,14 +11,21 @@ export const Route = createFileRoute("/app")({
 });
 
 function AppGate() {
-  const { session, loading } = useAuth();
+  const { session, profile, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !session) void navigate({ to: "/auth", replace: true, search: { mode: undefined } });
-  }, [loading, session, navigate]);
+    if (loading) return;
+    if (!session) {
+      void navigate({ to: "/auth", replace: true, search: { mode: undefined } });
+      return;
+    }
+    if (profile && !profile.onboarding_completed) {
+      void navigate({ to: "/onboarding", replace: true });
+    }
+  }, [loading, session, profile, navigate]);
 
-  if (loading || !session) {
+  if (loading || !session || (profile && !profile.onboarding_completed)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -28,3 +35,4 @@ function AppGate() {
 
   return <AppShell />;
 }
+

@@ -14,44 +14,149 @@ export type Database = {
   }
   public: {
     Tables: {
+      courses: {
+        Row: {
+          course_code: string
+          course_name: string
+          created_at: string
+          department_id: string | null
+          id: string
+          is_common: boolean
+          level: number
+        }
+        Insert: {
+          course_code: string
+          course_name: string
+          created_at?: string
+          department_id?: string | null
+          id?: string
+          is_common?: boolean
+          level: number
+        }
+        Update: {
+          course_code?: string
+          course_name?: string
+          created_at?: string
+          department_id?: string | null
+          id?: string
+          is_common?: boolean
+          level?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      departments: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           created_at: string
           daily_goal_minutes: number
+          department_id: string | null
           email: string | null
           full_name: string | null
           id: string
+          level: number | null
           notify_flashcards: boolean
           notify_groups: boolean
           notify_streak: boolean
+          onboarding_completed: boolean
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
           daily_goal_minutes?: number
+          department_id?: string | null
           email?: string | null
           full_name?: string | null
           id: string
+          level?: number | null
           notify_flashcards?: boolean
           notify_groups?: boolean
           notify_streak?: boolean
+          onboarding_completed?: boolean
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
           daily_goal_minutes?: number
+          department_id?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
+          level?: number | null
           notify_flashcards?: boolean
           notify_groups?: boolean
           notify_streak?: boolean
+          onboarding_completed?: boolean
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_courses: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_courses_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
