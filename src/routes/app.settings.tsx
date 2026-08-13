@@ -103,7 +103,7 @@ function Settings() {
 
   const handleSignOut = async () => {
     await signOut();
-    void navigate({ to: "/auth", replace: true });
+    void navigate({ to: "/auth", replace: true, search: { mode: undefined } });
   };
 
   return (

@@ -15,7 +15,7 @@ function AppGate() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !session) void navigate({ to: "/auth", replace: true });
+    if (!loading && !session) void navigate({ to: "/auth", replace: true, search: { mode: undefined } });
   }, [loading, session, navigate]);
 
   if (loading || !session) {

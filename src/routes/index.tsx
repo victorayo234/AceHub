@@ -8,15 +8,68 @@ import {
   Layers,
   Linkedin,
   Mail,
+  MessageCircle,
   Sparkles,
   Twitter,
   Upload,
   Users,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import heroImage from "@/assets/hero-study.jpg";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+function DiscordIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+    </svg>
+  );
+}
+
+const socials = [
+  { label: "GitHub", href: "https://github.com/victorayo234", icon: Github },
+  { label: "X / Twitter", href: "https://x.com/ayo__adebesin", icon: Twitter },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/ayo-adebesin-is-him/", icon: Linkedin },
+  { label: "Discord", href: "https://discord.com/users/1298397081555435564", icon: DiscordIcon },
+];
+
+type FooterLink = { label: string; to: "/" | "/app" } | { label: string; href: string };
+
+const footerColumns: { title: string; links: FooterLink[] }[] = [
+  {
+    title: "Product",
+    links: [
+      { label: "AI Summaries", to: "/app" },
+      { label: "Flashcards", to: "/app" },
+      { label: "Practice Quizzes", to: "/app" },
+      { label: "Study Planner", to: "/app" },
+      { label: "Progress & Streaks", to: "/app" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Student Guide", href: "#" },
+      { label: "Blog", href: "#" },
+      { label: "Help Center", href: "#" },
+      { label: "Community", href: "https://discord.com/users/1298397081555435564" },
+      { label: "Changelog", href: "#" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "#" },
+      { label: "Contact", href: "mailto:victorayo234@gmail.com" },
+      { label: "Feature requests", href: "https://github.com/victorayo234" },
+      { label: "Careers", href: "#" },
+    ],
+  },
+];
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -66,7 +119,7 @@ function Landing() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Button asChild variant="ghost" size="sm">
-            <Link to="/auth">Sign In</Link>
+            <Link to="/auth" search={{ mode: undefined }}>Sign In</Link>
           </Button>
           <Button asChild size="sm">
             <Link to="/auth" search={{ mode: "signup" }}>Get Started</Link>
@@ -95,7 +148,7 @@ function Landing() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/auth">Sign In</Link>
+              <Link to="/auth" search={{ mode: undefined }}>Sign In</Link>
             </Button>
           </div>
         </div>
@@ -142,163 +195,120 @@ function Landing() {
       </section>
 
       <footer className="border-t border-border bg-surface">
+        {/* Newsletter strip */}
+        <div className="border-b border-border">
+          <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 md:flex-row md:items-center md:justify-between md:px-6">
+            <div className="max-w-md">
+              <h3 className="text-lg font-semibold tracking-tight">Study tips, every other week</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                Revision techniques, product updates and exam-season playbooks. No spam, unsubscribe anytime.
+              </p>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                toast.success("You're subscribed — check your inbox for a welcome note.");
+                (e.currentTarget as HTMLFormElement).reset();
+              }}
+              className="flex w-full max-w-md items-center gap-2"
+            >
+              <label htmlFor="newsletter-email" className="sr-only">
+                Email address
+              </label>
+              <Input
+                id="newsletter-email"
+                type="email"
+                required
+                placeholder="you@university.edu"
+                className="h-11 bg-background"
+              />
+              <Button type="submit" size="lg" className="shrink-0">
+                Subscribe
+              </Button>
+            </form>
+          </div>
+        </div>
+
         {/* Main footer grid */}
         <div className="mx-auto max-w-6xl px-4 py-14 md:px-6">
-          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
 
             {/* Brand column */}
-            <div className="flex flex-col gap-5 lg:col-span-1">
-              <div className="flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-primary" />
-                <span className="text-base font-bold tracking-tight">AceHub</span>
+            <div className="flex flex-col gap-5 lg:col-span-2">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <GraduationCap className="h-[18px] w-[18px]" />
+                </span>
+                <span className="font-display text-base font-bold tracking-tight">AceHub</span>
               </div>
-              <p className="text-sm leading-relaxed text-muted-foreground">
+              <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
                 The ultimate learning workspace for students to track grades, calculate GPA, and organise their academic life.
               </p>
-              {/* Social icons */}
               <div className="flex items-center gap-3 pt-1">
-                <a
-                  href="https://github.com/victorayo234"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                >
-                  <Github className="h-4 w-4" />
-                </a>
-                <a
-                  href="https://x.com/ayo__adebesin"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="X / Twitter"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                >
-                  <Twitter className="h-4 w-4" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/ayo-adebesin-is-him/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                >
-                  <Linkedin className="h-4 w-4" />
-                </a>
-                <a
-                  href="https://discord.com/users/1298397081555435564"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Discord"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                >
-                  {/* Discord icon (not in Lucide, using official SVG path) */}
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
-                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-                  </svg>
-                </a>
-                <a
-                  href="mailto:victorayo234@gmail.com"
-                  aria-label="Email"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                >
-                  <Mail className="h-4 w-4" />
-                </a>
+                {socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:bg-primary-soft hover:text-primary"
+                  >
+                    <s.icon className="h-4 w-4" />
+                  </a>
+                ))}
               </div>
             </div>
 
-            {/* Product column */}
-            <div className="flex flex-col gap-4">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground">Product</h3>
-              <ul className="flex flex-col gap-2.5">
-                {[
-                  { label: "Features", to: "/" },
-                  { label: "How it works", to: "/" },
-                  { label: "AI Summaries", to: "/app" },
-                  { label: "Flashcards", to: "/app" },
-                  { label: "Practice Quizzes", to: "/app" },
-                  { label: "Study Streaks", to: "/app" },
-                ].map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      to={item.to}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {footerColumns.map((col) => (
+              <div key={col.title} className="flex flex-col gap-4">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground">{col.title}</h3>
+                <ul className="flex flex-col gap-2.5">
+                  {col.links.map((item) =>
+                    "to" in item ? (
+                      <li key={item.label}>
+                        <Link
+                          to={item.to}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ) : (
+                      <li key={item.label}>
+                        <a
+                          href={item.href}
+                          target={item.href.startsWith("http") ? "_blank" : undefined}
+                          rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {item.label}
+                        </a>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </div>
+            ))}
+          </div>
 
-            {/* Resources column */}
-            <div className="flex flex-col gap-4">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground">Resources</h3>
-              <ul className="flex flex-col gap-2.5">
-                {[
-                  { label: "Student Guide", href: "#" },
-                  { label: "FAQs", href: "#" },
-                  { label: "Community", href: "https://discord.com/users/1298397081555435564" },
-                  { label: "Changelog", href: "#" },
-                ].map((item) => (
-                  <li key={item.label}>
-                    <a
-                      href={item.href}
-                      target={item.href.startsWith("http") ? "_blank" : undefined}
-                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Company / Contact column */}
-            <div className="flex flex-col gap-4">
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground">Get in touch</h3>
-              <ul className="flex flex-col gap-2.5">
-                <li>
-                  <a
-                    href="mailto:victorayo234@gmail.com"
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    victorayo234@gmail.com
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/victorayo234"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.linkedin.com/in/ayo-adebesin-is-him/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://discord.com/users/1298397081555435564"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Discord
-                  </a>
-                </li>
-              </ul>
-            </div>
-
+          {/* Contact strip */}
+          <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 rounded-xl border border-border bg-background px-5 py-4">
+            <span className="text-sm font-medium">Need a hand?</span>
+            <a
+              href="mailto:victorayo234@gmail.com"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Mail className="h-4 w-4" /> victorayo234@gmail.com
+            </a>
+            <a
+              href="https://discord.com/users/1298397081555435564"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <MessageCircle className="h-4 w-4" /> Chat on Discord
+            </a>
           </div>
         </div>
 
@@ -308,17 +318,21 @@ function Landing() {
             <p className="text-xs text-muted-foreground">
               © {new Date().getFullYear()} AceHub. Made for students who care about their grades.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
               <a href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
                 Privacy Policy
               </a>
               <a href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
                 Terms of Service
               </a>
+              <a href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+                Cookies
+              </a>
             </div>
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
