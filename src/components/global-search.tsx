@@ -3,7 +3,8 @@ import { BookOpen, Layers, NotebookPen, Search, Users } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
-import { courses, decks, groups, notes } from "@/lib/mock-data";
+import { useMyCourses, useMyDepartment, type MyCourse } from "@/hooks/use-courses";
+import { decksForCourse, notesForCourse, recommendedGroups } from "@/lib/course-content";
 import { cn } from "@/lib/utils";
 
 type Result = {
@@ -16,7 +17,10 @@ type Result = {
   params?: Record<string, string>;
 };
 
-function buildIndex(): Result[] {
+function buildIndex(courses: MyCourse[], departmentName: string, level: number | null): Result[] {
+  const notes = courses.flatMap((c) => notesForCourse(c));
+  const decks = courses.flatMap((c) => decksForCourse(c));
+  const groups = courses.length ? recommendedGroups(courses, departmentName, level) : [];
   return [
     ...courses.map((c) => ({
       id: `course-${c.id}`,
@@ -46,7 +50,7 @@ function buildIndex(): Result[] {
     ...groups.map((g) => ({
       id: `group-${g.id}`,
       label: g.name,
-      meta: `${g.members} members`,
+      meta: `${g.members} members · ${g.courseCode}`,
       group: "Study Groups",
       icon: Users,
       to: "/app/groups",
@@ -62,7 +66,12 @@ export function GlobalSearch({ onNavigate }: { onNavigate?: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const index = useMemo(buildIndex, []);
+  const { data: myCourses } = useMyCourses();
+  const { departmentName, level } = useMyDepartment();
+  const index = useMemo(
+    () => buildIndex(myCourses ?? [], departmentName, level),
+    [myCourses, departmentName, level],
+  );
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
