@@ -108,3 +108,11 @@ export function useInvalidateMyCourses() {
 }
 
 export const REQUIRED_COURSES = 9;
+
+/** Name of the department the signed-in user picked during onboarding. */
+export function useMyDepartment() {
+  const { profile } = useAuth();
+  const { data: departments } = useDepartments();
+  const department = departments?.find((d) => d.id === profile?.department_id) ?? null;
+  return { department, departmentName: department?.name ?? "Your department", level: profile?.level ?? null };
+}
