@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ChevronDown, FileText, NotebookPen, Sparkles, UploadCloud } from "lucide-react";
-import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { ChevronDown, FileText, Loader2, NotebookPen, Sparkles, UploadCloud } from "lucide-react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { AiLoading, PageHeader } from "@/components/app-shell";
@@ -8,7 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { courses, notes } from "@/lib/mock-data";
+import { EmptyState } from "@/components/app-shell";
+import { ALL_COURSES, CourseFilter } from "@/components/course-filter";
+import { useMyCourses } from "@/hooks/use-courses";
+import { notesForCourse } from "@/lib/course-content";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/notes")({
@@ -152,14 +156,65 @@ function UploadZone() {
 }
 
 function Notes() {
-  const [selected, setSelected] = useState(notes[0]!.id);
-  const active = notes.find((n) => n.id === selected)!;
-  const course = courses.find((c) => c.id === active.courseId);
+  const { data: courses, isLoading } = useMyCourses();
+  const [filter, setFilter] = useState<string>(ALL_COURSES);
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const scoped = useMemo(() => {
+    const list = courses ?? [];
+    return filter === ALL_COURSES ? list : list.filter((c) => c.id === filter);
+  }, [courses, filter]);
+
+  const notes = useMemo(() => scoped.flatMap((c) => notesForCourse(c)), [scoped]);
+  const active = notes.find((n) => n.id === selected) ?? notes[0] ?? null;
+  const course = courses?.find((c) => c.id === active?.courseId);
+  const selectedCourse = courses?.find((c) => c.id === filter) ?? null;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-20">
+        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!courses?.length) {
+    return (
+      <div>
+        <PageHeader title="Notes" subtitle="Notes are organised by the courses you selected." />
+        <EmptyState
+          icon={NotebookPen}
+          title="No courses yet"
+          body="Pick your department, level and nine courses to start writing notes."
+          action={
+            <Button asChild>
+              <Link to="/onboarding">Set up my courses</Link>
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
-      <PageHeader title="Notes" subtitle="Write, upload and summarise your course material." />
+      <PageHeader title="Notes" subtitle="Write, upload and summarise material for your own courses." />
 
+      <div className="mb-6">
+        <CourseFilter courses={courses} value={filter} onChange={(v) => { setFilter(v); setSelected(null); }} />
+      </div>
+
+      {!active ? (
+        <EmptyState
+          icon={NotebookPen}
+          title={selectedCourse ? `No notes yet for ${selectedCourse.title}` : "No notes yet"}
+          body={
+            selectedCourse
+              ? `Create your first ${selectedCourse.code} note or upload a lecture PDF.`
+              : "Create a note or upload a lecture PDF for any of your courses."
+          }
+        />
+      ) : (
       <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
         <aside className="card-soft h-fit p-2">
           {notes.map((n) => (
@@ -169,7 +224,7 @@ function Notes() {
               onClick={() => setSelected(n.id)}
               className={cn(
                 "flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
-                n.id === selected ? "bg-accent" : "hover:bg-secondary",
+                n.id === active.id ? "bg-accent" : "hover:bg-secondary",
               )}
             >
               {n.kind === "pdf" ? (
@@ -208,7 +263,7 @@ function Notes() {
             </div>
             <Textarea
               key={`body-${active.id}`}
-              defaultValue={`${active.excerpt}\n\nKey points\n• Protons are pumped into the intermembrane space.\n• ATP synthase converts the gradient into chemical energy.\n• Oxygen accepts electrons at the end of the chain.`}
+              defaultValue={`${active.excerpt}\n\nKey points\n• Define the core terms in your own words.\n• Work through one example end to end.\n• Note the questions the lecturer hinted at.`}
               className="mt-4 min-h-64 resize-none border-0 px-0 text-sm leading-relaxed shadow-none focus-visible:ring-0"
             />
             <div className="mt-4 flex flex-wrap gap-2">
@@ -222,6 +277,7 @@ function Notes() {
           <UploadZone />
         </div>
       </div>
+      )}
     </div>
   );
 }
