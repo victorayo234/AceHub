@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth")({
@@ -125,15 +125,18 @@ function AuthPage() {
   const handleGoogle = async () => {
     setBusy(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/app`,
+        },
       });
-      if (result.error) {
-        toast.error(result.error.message ?? "Google sign-in failed");
-        return;
+      if (error) {
+        toast.error(error.message ?? "Google sign-in failed");
       }
-      if (result.redirected) return;
-      void navigate({ to: "/app", replace: true });
+      // Supabase will redirect the browser — no manual navigation needed
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Google sign-in failed");
     } finally {
       setBusy(false);
     }
