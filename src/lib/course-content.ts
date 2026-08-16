@@ -256,3 +256,36 @@ export function departmentGroups(department: string, level: number | null): Stud
     },
   ];
 }
+
+export type CourseNote = {
+  id: string;
+  title: string;
+  courseId: string;
+  kind: "note" | "pdf";
+  updated: string;
+  excerpt: string;
+};
+
+const NOTE_TITLES = [
+  "Lecture 1 — Introduction & scope",
+  "Lecture 4 — Core concepts",
+  "Tutorial questions & solutions",
+  "Past questions summary",
+  "Lab / practical notes",
+  "Revision sheet",
+];
+
+const UPDATED = ["2h ago", "Yesterday", "2 days ago", "Last week", "2 weeks ago"];
+
+export function notesForCourse(course: MyCourse): CourseNote[] {
+  if (!isStarted(course)) return [];
+  const count = 1 + rand(`${course.id}-notecount`, 3);
+  return Array.from({ length: count }, (_, i) => ({
+    id: `${course.id}-note-${i}`,
+    title: `${course.code} · ${NOTE_TITLES[(rand(`${course.id}-nt${i}`, NOTE_TITLES.length) + i) % NOTE_TITLES.length]}`,
+    courseId: course.id,
+    kind: rand(`${course.id}-nk${i}`, 3) === 0 ? ("pdf" as const) : ("note" as const),
+    updated: UPDATED[(rand(`${course.id}-nu${i}`, UPDATED.length) + i) % UPDATED.length]!,
+    excerpt: `Key ideas from ${course.title} — definitions, worked examples and the points the lecturer stressed for ${course.code}.`,
+  }));
+}
