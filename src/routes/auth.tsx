@@ -44,10 +44,36 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
+  const redirectUrl =
+    import.meta.env.VITE_SUPABASE_REDIRECT_URL ??
+    import.meta.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
+    `${window.location.origin}/auth`;
 
   useEffect(() => {
     if (!loading && session) void navigate({ to: "/app", replace: true });
   }, [session, loading, navigate]);
+
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("code");
+    if (!code || session || loading) return;
+
+    setBusy(true);
+    void supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+      if (error) {
+        toast.error("That sign-in link is invalid or has expired.");
+        return;
+      }
+      void navigate({ to: "/app", replace: true });
+    }).finally(() => setBusy(false));
+  }, [loading, navigate, session]);
+
+  const authErrorMessage = (error: { message: string }) => {
+    const message = error.message.toLowerCase();
+    if (message.includes("not confirmed")) return "Please confirm your email before signing in.";
+    if (message.includes("invalid login credentials")) return "Invalid email or password.";
+    if (message.includes("rate limit") || message.includes("too many")) return "Too many attempts. Please try again later.";
+    return "We couldn't complete that request. Please try again.";
+  };
 
   const wrap = (fn: () => Promise<void>) => async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +81,7 @@ function AuthPage() {
     try {
       await fn();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Something went wrong");
+      toast.error(err && typeof err === "object" && "message" in err ? authErrorMessage(err as { message: string }) : "Something went wrong");
     } finally {
       setBusy(false);
     }
@@ -70,7 +96,7 @@ function AuthPage() {
         toast.message("Confirm your email", { description: "We sent you a verification code." });
         return;
       }
-      throw error;
+      throw new Error(authErrorMessage(error));
     }
     toast.success("Welcome back");
     void navigate({ to: "/app", replace: true });
@@ -82,7 +108,7 @@ function AuthPage() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/app`,
+        emailRedirectTo: redirectUrl,
         data: { full_name: name },
       },
     });
@@ -128,7 +154,7 @@ function AuthPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/app`,
+          redirectTo: redirectUrl,
         },
       });
       if (error) {
