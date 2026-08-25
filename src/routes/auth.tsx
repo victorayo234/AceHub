@@ -54,17 +54,40 @@ function AuthPage() {
   }, [session, loading, navigate]);
 
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (!code || session || loading) return;
+    if (loading || session) return;
+
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get("code");
+    const authError = url.searchParams.get("error_description");
+    const hash = new URLSearchParams(url.hash.replace(/^#/, ""));
+    const accessToken = hash.get("access_token");
+    const refreshToken = hash.get("refresh_token");
+
+    if (authError) {
+      toast.error("Google sign-in was cancelled or could not be completed.");
+      window.history.replaceState({}, document.title, url.pathname);
+      return;
+    }
+
+    if (!code && (!accessToken || !refreshToken)) return;
 
     setBusy(true);
-    void supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-      if (error) {
+    const finish = async () => {
+      const result = code
+        ? await supabase.auth.exchangeCodeForSession(code)
+        : await supabase.auth.setSession({ access_token: accessToken!, refresh_token: refreshToken! });
+
+      if (result.error) {
         toast.error("That sign-in link is invalid or has expired.");
         return;
       }
-      void navigate({ to: "/app", replace: true });
-    }).finally(() => setBusy(false));
+
+      window.history.replaceState({}, document.title, url.pathname);
+      toast.success("Welcome to AceHub");
+      await navigate({ to: "/app", replace: true });
+    };
+
+    void finish().catch(() => toast.error("We couldn't complete sign-in. Please try again.")).finally(() => setBusy(false));
   }, [loading, navigate, session]);
 
   const authErrorMessage = (error: { message: string }) => {

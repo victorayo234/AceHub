@@ -49,10 +49,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select("*")
       .eq("id", userId)
       .maybeSingle();
-    if (data) {
-      setProfile(data as Profile);
-      setAvatarSrc(await resolveAvatar(data.avatar_url));
+    if (!data) {
+      setProfile(null);
+      setAvatarSrc(null);
+      return;
     }
+
+    setProfile(data as Profile);
+    setAvatarSrc(await resolveAvatar(data.avatar_url));
   }, []);
 
   useEffect(() => {
