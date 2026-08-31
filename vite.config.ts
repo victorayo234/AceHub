@@ -15,5 +15,10 @@ export default defineConfig({
   // Hard-pin Nitro to the Vercel preset so `npm run build` always outputs a
   // Vercel-compatible serverless bundle. NITRO_PRESET env var on Vercel also
   // overrides this automatically, but this makes local CI predictable.
-  nitro: { preset: "vercel" },
+  nitro: {
+  preset: "vercel",
+  externals: {
+    inline: ["tslib"],
+  },
+} as any,
 });
