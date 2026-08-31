@@ -1,4 +1,6 @@
-import "tslib";
+import { __assign } from "tslib";
+// @ts-ignore
+globalThis.__force_tslib = __assign;
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
