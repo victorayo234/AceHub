@@ -29,15 +29,20 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 function createSupabaseClient() {
   // Use import.meta.env for client-side (Vite build-time replacement)
   // Fall back to process.env for SSR (server-side rendering)
+  const rawUrl = import.meta.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"];
   const SUPABASE_URL =
-    import.meta.env["VITE_SUPABASE_URL"] ||
-    process.env["SUPABASE_URL"] ||
-    "https://eiuqjjjkhcvphpgeqko.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY =
+    !rawUrl || rawUrl.includes("pndpauxbondleucksjiz")
+      ? "https://eiuqjjjkhcvphpgeqko.supabase.co"
+      : rawUrl;
+
+  const rawKey =
     import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
     process.env["SUPABASE_PUBLISHABLE_KEY"] ||
-    process.env["SUPABASE_ANON_KEY"] ||
-    "sb_publishable_vOjd2tr6P9ry_EtKUcJGyg_2EKv6Xvt";
+    process.env["SUPABASE_ANON_KEY"];
+  const SUPABASE_PUBLISHABLE_KEY =
+    !rawKey || rawKey.includes("pndpauxbondleucksjiz")
+      ? "sb_publishable_vOjd2tr6P9ry_EtKUcJGyg_2EKv6Xvt"
+      : rawKey;
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     global: {
