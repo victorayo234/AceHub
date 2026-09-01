@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, GraduationCap, Loader2, Mail } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowLeft, CheckCircle2, Eye, EyeOff, GraduationCap, Loader2, Mail } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -33,6 +33,19 @@ export const Route = createFileRoute("/auth")({
 
 type Mode = "signin" | "signup" | "verify" | "forgot" | "reset";
 
+function getPasswordStrength(p: string): { score: number; label: string; color: string } {
+  if (!p) return { score: 0, label: "", color: "bg-muted" };
+  let score = 0;
+  if (p.length >= 8) score += 1;
+  if (p.length >= 10 && /[a-z]/.test(p) && /[A-Z]/.test(p)) score += 1;
+  if (/\d/.test(p)) score += 1;
+  if (/[^a-zA-Z0-9]/.test(p)) score += 1;
+
+  if (score <= 1) return { score: 1, label: "Weak", color: "bg-red-500" };
+  if (score <= 3) return { score: 2, label: "Medium", color: "bg-amber-500" };
+  return { score: 3, label: "Strong", color: "bg-emerald-500" };
+}
+
 function AuthPage() {
   const navigate = useNavigate();
   const { session, loading } = useAuth();
@@ -42,8 +55,14 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const passwordsMatch = mode !== "signup" || !confirmPassword || password === confirmPassword;
 
   useEffect(() => {
     if (!loading && session) void navigate({ to: "/app", replace: true });
@@ -78,6 +97,8 @@ function AuthPage() {
 
   const handleSignUp = wrap(async () => {
     if (password.length < 8) throw new Error("Password must be at least 8 characters");
+    if (password !== confirmPassword) throw new Error("Passwords do not match");
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -250,19 +271,109 @@ function AuthPage() {
                     </button>
                   )}
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="••••••••"
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="••••••••"
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+
+                {/* Password Strength Indicator (Signup / Reset Mode) */}
+                {(mode === "signup" || mode === "reset") && password.length > 0 && (
+                  <div className="mt-2 space-y-1.5 animate-in fade-in-50">
+                    <div className="flex h-1.5 w-full gap-1.5 overflow-hidden rounded-full bg-secondary">
+                      <div
+                        className={`h-full flex-1 rounded-full transition-all duration-300 ${
+                          strength.score >= 1 ? strength.color : "bg-transparent"
+                        }`}
+                      />
+                      <div
+                        className={`h-full flex-1 rounded-full transition-all duration-300 ${
+                          strength.score >= 2 ? strength.color : "bg-transparent"
+                        }`}
+                      />
+                      <div
+                        className={`h-full flex-1 rounded-full transition-all duration-300 ${
+                          strength.score >= 3 ? strength.color : "bg-transparent"
+                        }`}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                      <span>
+                        Strength:{" "}
+                        <strong
+                          className={
+                            strength.score === 1
+                              ? "text-red-500 font-semibold"
+                              : strength.score === 2
+                                ? "text-amber-500 font-semibold"
+                                : "text-emerald-500 font-semibold"
+                          }
+                        >
+                          {strength.label}
+                        </strong>
+                      </span>
+                      <span>Min 8 chars, mix cases & numbers</span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
-            <Button type="submit" className="w-full" disabled={busy}>
+            {/* Confirm Password Field (Signup only) */}
+            {mode === "signup" && (
+              <div className="space-y-2">
+                <Label htmlFor="confirm-password">Confirm Password</Label>
+                <div className="relative">
+                  <Input
+                    id="confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    placeholder="••••••••"
+                    className={`pr-10 ${
+                      confirmPassword && !passwordsMatch ? "border-destructive focus-visible:ring-destructive" : ""
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                {confirmPassword && !passwordsMatch && (
+                  <p className="text-xs font-medium text-destructive animate-in fade-in-50">
+                    Passwords do not match.
+                  </p>
+                )}
+                {confirmPassword && passwordsMatch && confirmPassword.length >= 8 && (
+                  <p className="flex items-center gap-1 text-xs font-medium text-emerald-500 animate-in fade-in-50">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Passwords match
+                  </p>
+                )}
+              </div>
+            )}
+
+            <Button type="submit" className="w-full" disabled={busy || (mode === "signup" && !passwordsMatch)}>
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {mode === "signin"
                 ? "Sign in"

@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { AppShell } from "@/components/app-shell";
+import { DashboardLoader } from "@/components/dashboard-loader";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/app")({
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/app")({
 function AppGate() {
   const { session, profile, loading } = useAuth();
   const navigate = useNavigate();
+  const [introReady, setIntroReady] = useState(false);
 
   useEffect(() => {
     if (loading) return;
@@ -25,14 +26,14 @@ function AppGate() {
     }
   }, [loading, session, profile, navigate]);
 
-  if (loading || !session || (profile && !profile.onboarding_completed)) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+  if (loading || !session || (profile && !profile.onboarding_completed) || !introReady) {
+    return <DashboardLoader onComplete={() => setIntroReady(true)} duration={1200} />;
   }
 
-  return <AppShell />;
+  return (
+    <div className="animate-in fade-in duration-300">
+      <AppShell />
+    </div>
+  );
 }
 
