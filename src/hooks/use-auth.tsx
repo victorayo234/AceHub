@@ -58,22 +58,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const hasAuthCallback =
+      typeof window !== "undefined" &&
+      (window.location.hash.includes("access_token") ||
+        window.location.search.includes("code="));
+
+    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
       if (!active) return;
       setSession(newSession);
       if (newSession?.user) {
-        void loadProfile(newSession.user.id);
+        await loadProfile(newSession.user.id);
       } else {
         setProfile(null);
         setAvatarSrc(null);
       }
+      setLoading(false);
     });
 
     void supabase.auth.getSession().then(async ({ data }) => {
       if (!active) return;
-      setSession(data.session);
-      if (data.session?.user) await loadProfile(data.session.user.id);
-      setLoading(false);
+      if (data.session) {
+        setSession(data.session);
+        if (data.session.user) await loadProfile(data.session.user.id);
+        setLoading(false);
+      } else if (!hasAuthCallback) {
+        setLoading(false);
+      }
     });
 
     return () => {
