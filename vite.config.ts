@@ -20,10 +20,8 @@ export default defineConfig({
     preset: "vercel",
   } as any,
   vite: {
-    resolve: {
-      alias: {
-        tslib: fileURLToPath(new URL("./node_modules/tslib/tslib.es6.mjs", import.meta.url)),
-      },
+    ssr: {
+      noExternal: true,
     },
   },
 });
