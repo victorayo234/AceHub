@@ -58,16 +58,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
 
-    const hasAuthCallback =
-      typeof window !== "undefined" &&
-      (window.location.hash.includes("access_token") ||
-        window.location.search.includes("code="));
-
     const { data: sub } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
       if (!active) return;
       setSession(newSession);
       if (newSession?.user) {
-        await loadProfile(newSession.user.id);
+        if (typeof window !== "undefined" && window.location.hash.includes("access_token")) {
+          window.history.replaceState(null, "", window.location.pathname + window.location.search);
+        }
+        void loadProfile(newSession.user.id);
       } else {
         setProfile(null);
         setAvatarSrc(null);
@@ -79,11 +77,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!active) return;
       if (data.session) {
         setSession(data.session);
-        if (data.session.user) await loadProfile(data.session.user.id);
-        setLoading(false);
-      } else if (!hasAuthCallback) {
-        setLoading(false);
+        void loadProfile(data.session.user.id);
       }
+      setLoading(false);
     });
 
     return () => {
