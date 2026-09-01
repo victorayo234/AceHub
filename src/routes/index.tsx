@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import {
   ArrowRight,
   Flame,
@@ -20,6 +20,7 @@ import heroImage from "@/assets/hero-study.jpg";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/use-auth";
 
 function DiscordIcon({ className }: { className?: string }) {
   return (
@@ -107,6 +108,15 @@ const steps = [
 ];
 
 function Landing() {
+  const { session, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && session) {
+      void navigate({ to: "/app", replace: true });
+    }
+  }, [session, loading, navigate]);
+
   return (
     <div className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 md:px-6">
@@ -118,12 +128,20 @@ function Landing() {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/auth" search={{ mode: undefined }}>Sign In</Link>
-          </Button>
-          <Button asChild size="sm">
-            <Link to="/auth" search={{ mode: "signup" }}>Get Started</Link>
-          </Button>
+          {session ? (
+            <Button asChild size="sm">
+              <Link to="/app">Dashboard <ArrowRight className="ml-1.5 h-3.5 w-3.5" /></Link>
+            </Button>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/auth" search={{ mode: undefined }}>Sign In</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link to="/auth" search={{ mode: "signup" }}>Get Started</Link>
+              </Button>
+            </>
+          )}
         </div>
       </header>
 
