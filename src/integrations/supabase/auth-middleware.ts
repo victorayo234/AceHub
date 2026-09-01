@@ -34,9 +34,9 @@ export const requireSupabaseAuth = createMiddleware({ type: 'function' }).server
   async ({ next }) => {
 
     const rawUrl = process.env['SUPABASE_URL'];
-    const SUPABASE_URL = !rawUrl || rawUrl.includes("pndpauxbondleucksjiz") ? 'https://eiuqjjjkhcvphpgeqko.supabase.co' : rawUrl;
+    const SUPABASE_URL = !rawUrl || rawUrl.includes("pndpauxbondleucksjiz") || rawUrl.includes("eiuqjjjkhcvphpgeqko") ? 'https://eiuqjjjkhcvphpgegqko.supabase.co' : rawUrl;
     const rawKey = process.env['SUPABASE_PUBLISHABLE_KEY'] || process.env['SUPABASE_ANON_KEY'];
-    const SUPABASE_PUBLISHABLE_KEY = !rawKey || rawKey.includes("pndpauxbondleucksjiz") ? 'sb_publishable_vOjd2tr6P9ry_EtKUcJGyg_2EKv6Xvt' : rawKey;
+    const SUPABASE_PUBLISHABLE_KEY = !rawKey || rawKey.includes("pndpauxbondleucksjiz") || rawKey.startsWith("sb_publishable_vOjd") ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpdXFqampraGN2cGhwZ2VncWtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDYwMDUsImV4cCI6MjEwMzIyMjAwNX0.Tl88bgPTEfDSS5DPYb9Uc1tKz9TJ3dp0CdAVSHc4Kb4' : rawKey;
 
     const request = getRequest();
 
