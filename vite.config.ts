@@ -16,9 +16,7 @@ export default defineConfig({
   // Vercel-compatible serverless bundle. NITRO_PRESET env var on Vercel also
   // overrides this automatically, but this makes local CI predictable.
   nitro: {
-  preset: "vercel",
-  externals: {
-    inline: ["tslib"],
-  },
-} as any,
+    preset: "vercel",
+    noExternals: true,
+  } as any,
 });
