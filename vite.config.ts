@@ -5,6 +5,7 @@
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   tanstackStart: {
@@ -17,6 +18,12 @@ export default defineConfig({
   // overrides this automatically, but this makes local CI predictable.
   nitro: {
     preset: "vercel",
-    noExternals: true,
   } as any,
+  vite: {
+    resolve: {
+      alias: {
+        tslib: fileURLToPath(new URL("./node_modules/tslib/tslib.es6.mjs", import.meta.url)),
+      },
+    },
+  },
 });
