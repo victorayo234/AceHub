@@ -20,6 +20,17 @@ export default defineConfig({
     preset: "vercel",
   } as any,
   vite: {
+    define: {
+      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
+        process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || "https://eiuqjjjkhcvphpgeqko.supabase.co"
+      ),
+      "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
+        process.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || "sb_publishable_vOjd2tr6P9ry_EtKUcJGyg_2EKv6Xvt"
+      ),
+      "import.meta.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(
+        process.env.VITE_SUPABASE_PROJECT_ID || process.env.SUPABASE_PROJECT_ID || "eiuqjjjkhcvphpgeqko"
+      ),
+    },
     ssr: {
       noExternal: true,
     },
