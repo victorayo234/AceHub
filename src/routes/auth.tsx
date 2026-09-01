@@ -45,8 +45,8 @@ function AuthPage() {
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const redirectUrl =
-    import.meta.env.VITE_SUPABASE_REDIRECT_URL ??
-    import.meta.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
+    import.meta.env.VITE_SUPABASE_REDIRECT_URL ||
+    import.meta.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ||
     `${window.location.origin}/auth`;
 
   useEffect(() => {
