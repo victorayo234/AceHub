@@ -19,6 +19,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useAuth, initials } from "@/hooks/use-auth";
+import { useStudyTracker } from "@/hooks/use-study-tracker";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -98,6 +99,7 @@ function SidebarUser({ onNavigate }: { onNavigate?: () => void }) {
 export function AppShell() {
   const [open, setOpen] = useState(false);
   const { profile, user, avatarSrc } = useAuth();
+  const { streak } = useStudyTracker();
 
   return (
     <div className="min-h-screen bg-background">
@@ -129,7 +131,7 @@ export function AppShell() {
           <div className="ml-auto flex items-center gap-2 md:gap-3">
             <div className="flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-semibold text-accent-foreground">
               <Flame className="h-4 w-4 text-flame" />
-              14
+              {streak}
             </div>
             <ThemeToggle />
 
